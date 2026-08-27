@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPT - Metodologías Pro</title>
+    <style>
+        :root {
+            --bg-color: #090014;
+            --panel-color: rgba(18, 12, 32, 0.65);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e6e1f0;
+            --text-muted: #a89fc2;
+            --accent: #8a2be2;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 24px 20px 60px;
+            background-color: var(--bg-color);
+            background-image:
+                radial-gradient(circle at 15% 10%, rgba(138, 43, 226, 0.18), transparent 45%),
+                radial-gradient(circle at 85% 0%, rgba(0, 255, 255, 0.08), transparent 40%),
+                linear-gradient(rgba(138, 43, 226, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(138, 43, 226, 0.06) 1px, transparent 1px);
+            background-size: auto, auto, 30px 30px, 30px 30px;
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2;
+            font-size: clamp(26px, 5vw, 40px);
+            margin: 10px 0 8px;
+            letter-spacing: 0.5px;
+        }
+
+        #subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 40px;
+            letter-spacing: 0.3px;
+        }
+
+        #main-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        #detail-page {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--panel-color);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--panel-border);
+            padding: clamp(24px, 5vw, 40px);
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-back {
+            background-color: transparent;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 24px;
+            transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .btn-back:hover,
+        .btn-back:focus-visible {
+            background-color: #fff;
+            color: #000;
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.4);
+        }
+        .btn-back:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .card {
+            background-color: var(--panel-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--panel-border);
+            border-radius: 14px;
+            padding: 24px;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            border-left: 4px solid;
+            opacity: 0;
+            animation: cardIn 0.45s ease-out forwards;
+        }
+
+        .card:hover,
+        .card:focus-visible {
+            transform: translateY(-6px);
+        }
+        .card:focus-visible {
+            outline: none;
+            border-color: currentColor;
+        }
+        .card:active {
+            transform: translateY(-2px);
+        }
+
+        .card h2 {
+            margin: 0 0 8px;
+            font-size: 21px;
+            line-height: 1.3;
+        }
+
+        .card p {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .color-violet { border-color: #8a2be2; }
+        .color-violet:hover, .color-violet:focus-visible { box-shadow: 0 0 22px rgba(138, 43, 226, 0.45); }
+        .color-violet h2 { color: #d4a5ff; }
+
+        .color-cyan { border-color: #00ffff; }
+        .color-cyan:hover, .color-cyan:focus-visible { box-shadow: 0 0 22px rgba(0, 255, 255, 0.45); }
+        .color-cyan h2 { color: #80ffff; }
+
+        .color-magenta { border-color: #ff007f; }
+        .color-magenta:hover, .color-magenta:focus-visible { box-shadow: 0 0 22px rgba(255, 0, 127, 0.45); }
+        .color-magenta h2 { color: #ff80bf; }
+
+        .color-green { border-color: #39ff14; }
+        .color-green:hover, .color-green:focus-visible { box-shadow: 0 0 22px rgba(57, 255, 20, 0.45); }
+        .color-green h2 { color: #b3ff99; }
+
+        .color-orange { border-color: #ff8c00; }
+        .color-orange:hover, .color-orange:focus-visible { box-shadow: 0 0 22px rgba(255, 140, 0, 0.45); }
+        .color-orange h2 { color: #ffcc80; }
+
+        .color-yellow { border-color: #ffd700; }
+        .color-yellow:hover, .color-yellow:focus-visible { box-shadow: 0 0 22px rgba(255, 215, 0, 0.45); }
+        .color-yellow h2 { color: #ffe680; }
+
+        .color-blue { border-color: #1e90ff; }
+        .color-blue:hover, .color-blue:focus-visible { box-shadow: 0 0 22px rgba(30, 144, 255, 0.45); }
+        .color-blue h2 { color: #99ccff; }
+
+        .color-teal { border-color: #00fa9a; }
+        .color-teal:hover, .color-teal:focus-visible { box-shadow: 0 0 22px rgba(0, 250, 154, 0.45); }
+        .color-teal h2 { color: #99ffcc; }
+
+        #detail-content h2 {
+            font-size: clamp(24px, 4vw, 32px);
+            border-bottom: 2px solid;
+            padding-bottom: 12px;
+            margin-top: 0;
+        }
+        #detail-content h3 {
+            color: #ffffff;
+            margin-top: 30px;
+            font-size: 20px;
+        }
+        #detail-content p, #detail-content li {
+            font-size: 17px;
+            line-height: 1.65;
+            color: var(--text-main);
+        }
+        #detail-content ul {
+            padding-left: 20px;
+        }
+        #detail-content li {
+            margin-bottom: 10px;
+        }
+        #detail-content li strong {
+            color: #ffffff;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .card, #detail-page {
+                animation: none;
+                opacity: 1;
+            }
+            .card:hover { transform: none; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 16px 14px 40px; }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="main-title">💡 EPT: Metodologías de Negocio</h1>
+    <p id="subtitle">Toca una tarjeta para ver el detalle de cada metodología</p>
+
+    <div id="main-menu"></div>
+
+    <div id="detail-page">
+        <button class="btn-back" onclick="volverAlMenu()">← Volver al menú</button>
+        <div id="detail-content"></div>
+    </div>
+
+    <script>
+        const metodologias = [
+            {
+                id: "design",
+                titulo: "1. Design Thinking",
+                resumen: "Resuelve problemas complejos centrándote puramente en las necesidades del usuario.",
+                claseColor: "color-violet",
+                colorHex: "#8a2be2",
+                detalle: `
+                    <h2>Design Thinking (Pensamiento de Diseño)</h2>
+                    <p>Es una metodología ágil de innovación centrada en el ser humano. Su objetivo no es crear un producto y luego buscar a quién vendérselo, sino investigar qué necesita la gente y crear un producto que satisfaga esa necesidad exacta.</p>
+                    <h3>Las 5 Fases Fundamentales:</h3>
+                    <ul>
+                        <li><strong>1. Empatizar:</strong> Salir a la calle, entrevistar, observar. Tienes que entender profundamente los dolores, deseos y frustraciones de tu usuario.</li>
+                        <li><strong>2. Definir:</strong> Con toda la información recopilada, formulas el problema exacto. Ejemplo: "Los jóvenes necesitan una forma de comer sano y rápido porque no tienen tiempo de cocinar".</li>
+                        <li><strong>3. Idear:</strong> Sesiones de <i>brainstorming</i> (lluvia de ideas). Aquí ninguna idea es mala. Se busca cantidad de soluciones, desde las más lógicas hasta las más locas.</li>
+                        <li><strong>4. Prototipar:</strong> Hacer las ideas tangibles. No gastas dinero en un producto final, haces maquetas de cartón, dibujos o interfaces básicas.</li>
+                        <li><strong>5. Evaluar (Testear):</strong> Pones el prototipo en manos del usuario. Si falla, es excelente: aprendiste barato y rápido. Iteras y mejoras.</li>
+                    </ul>
+                `
+            },
+            {
+                id: "lean-canvas",
+                titulo: "2. Lean Canvas",
+                resumen: "El plan de negocios resumido en una sola hoja, ideal para startups que recién inician.",
+                claseColor: "color-cyan",
+                colorHex: "#00ffff",
+                detalle: `
+                    <h2>Lean Canvas (Lienzo Lean)</h2>
+                    <p>Creado por Ash Maurya, es una adaptación del Business Model Canvas diseñada específicamente para emprendedores. Reemplaza planes de negocio de 100 páginas por un lienzo visual dividido en 9 bloques que puedes leer en 5 minutos.</p>
+                    <h3>Los 9 Bloques Clave:</h3>
+                    <ul>
+                        <li><strong>1. Problema:</strong> Los 3 problemas principales que tiene tu cliente.</li>
+                        <li><strong>2. Segmento de Clientes:</strong> ¿Quién es tu cliente ideal (Early Adopter)?</li>
+                        <li><strong>3. Proposición de Valor Única:</strong> ¿Qué te hace especial y por qué deberían elegirte a ti?</li>
+                        <li><strong>4. Solución:</strong> Las 3 características principales de tu producto que resuelven los problemas.</li>
+                        <li><strong>5. Canales:</strong> ¿Cómo vas a llegar al cliente? (Redes sociales, tienda física, web).</li>
+                        <li><strong>6. Flujos de Ingreso:</strong> ¿Cómo vas a cobrar? (Suscripción, venta directa, publicidad).</li>
+                        <li><strong>7. Estructura de Costos:</strong> ¿Cuáles son tus gastos fijos y variables más importantes?</li>
+                        <li><strong>8. Métricas Clave:</strong> ¿Qué números te dirán si tu negocio va bien? (Ej. Número de usuarios nuevos al mes).</li>
+                        <li><strong>9. Ventaja Especial:</strong> Algo que no puede ser copiado o comprado fácilmente por la competencia.</li>
+                    </ul>
+                `
+            },
+            {
+                id: "foda",
+                titulo: "3. Análisis FODA",
+                resumen: "Radiografía de tu negocio: descubre qué haces bien y qué te amenaza desde el exterior.",
+                claseColor: "color-magenta",
+                colorHex: "#ff007f",
+                detalle: `
+                    <h2>Análisis FODA (DAFO)</h2>
+                    <p>Es una herramienta de diagnóstico estratégico. Te permite tener una visión clara de la situación actual de tu negocio o proyecto para tomar decisiones acertadas. Se divide en factores internos (que tú controlas) y externos (que no controlas).</p>
+                    <h3>Factores Internos:</h3>
+                    <ul>
+                        <li><strong>Fortalezas:</strong> Ventajas competitivas. ¿Qué haces mejor que tu competencia? ¿Tienes un equipo muy talentoso? ¿Tecnología exclusiva?</li>
+                        <li><strong>Debilidades:</strong> Puntos críticos negativos. ¿Te falta capital? ¿Poca experiencia en el mercado? ¿Maquinaria obsoleta? Debes trabajar para minimizarlas.</li>
+                    </ul>
+                    <h3>Factores Externos:</h3>
+                    <ul>
+                        <li><strong>Oportunidades:</strong> Tendencias del mercado que te favorecen. Ejemplo: Una nueva ley que beneficia tu sector, o una tecnología que abarata tus costos.</li>
+                        <li><strong>Amenazas:</strong> Riesgos del entorno. Ejemplo: Entrada de un competidor internacional muy fuerte, crisis económica, cambios drásticos en los gustos del consumidor.</li>
+                    </ul>
+                `
+            },
+            {
+                id: "lean-startup",
+                titulo: "4. Método Lean Startup",
+                resumen: "Crea tu negocio sin desperdiciar recursos: Construye, Mide y Aprende.",
+                claseColor: "color-green",
+                colorHex: "#39ff14",
+                detalle: `
+                    <h2>Método Lean Startup</h2>
+                    <p>Popularizado por Eric Ries, esta metodología busca reducir el riesgo a la hora de lanzar un nuevo producto. Su regla de oro es: no inviertas meses creando algo que nadie quiere comprar.</p>
+                    <h3>El Ciclo de Lean Startup:</h3>
+                    <ul>
+                        <li><strong>1. Construir (Producto Mínimo Viable - MVP):</strong> Crea la versión más básica de tu producto que aún así entregue valor al cliente. No necesita ser perfecto, solo funcional.</li>
+                        <li><strong>2. Medir:</strong> Lanza el MVP al mercado y recolecta datos reales. ¿La gente lo usa? ¿Están dispuestos a pagar por él?</li>
+                        <li><strong>3. Aprender:</strong> Analiza los datos. Si la idea funciona, perseveras y la mejoras. Si los datos demuestran que a nadie le interesa, "Pivotas" (cambias la estrategia o el enfoque del producto sin empezar desde cero).</li>
+                    </ul>
+                    <p><em>Beneficio principal: Acelera el proceso de fracaso para que encuentres el éxito más rápido y gastando menos dinero.</em></p>
+                `
+            },
+            {
+                id: "scrum",
+                titulo: "5. Metodología Scrum",
+                resumen: "Trabajo en equipo de alto rendimiento mediante ciclos cortos y entregas constantes.",
+                claseColor: "color-orange",
+                colorHex: "#ff8c00",
+                detalle: `
+                    <h2>Metodología Scrum</h2>
+                    <p>Es un marco de trabajo ágil utilizado principalmente en el desarrollo de software, pero aplicable a cualquier proyecto complejo. Se basa en entregas parciales y regulares en lugar de esperar meses para ver un resultado final.</p>
+                    <h3>Roles, Eventos y Artefactos:</h3>
+                    <ul>
+                        <li><strong>Product Owner:</strong> El representante del cliente. Define qué se debe hacer y prioriza la lista de tareas (Product Backlog).</li>
+                        <li><strong>Scrum Master:</strong> El líder servicial. Se asegura de que el equipo no tenga obstáculos y siga las reglas de Scrum.</li>
+                        <li><strong>El Equipo:</strong> Los creadores. Organizan cómo van a realizar el trabajo.</li>
+                        <li><strong>Sprint:</strong> Un ciclo de trabajo corto (generalmente 2 a 4 semanas) al final del cual se debe entregar una parte del producto terminada y funcional.</li>
+                        <li><strong>Daily Stand-up:</strong> Reunión diaria de 15 minutos para sincronizar al equipo: ¿Qué hice ayer? ¿Qué haré hoy? ¿Qué me bloquea?</li>
+                    </ul>
+                `
+            },
+            {
+                id: "kanban",
+                titulo: "6. Sistema Kanban",
+                resumen: "Visualiza tu flujo de trabajo y evita los cuellos de botella con tarjetas y columnas.",
+                claseColor: "color-yellow",
+                colorHex: "#ffd700",
+                detalle: `
+                    <h2>Sistema Kanban</h2>
+                    <p>Originado en las fábricas de Toyota en Japón, Kanban significa "tarjeta visual". Es una forma muy sencilla pero poderosa de gestionar el trabajo y evitar la sobrecarga del equipo.</p>
+                    <h3>Principios Básicos:</h3>
+                    <ul>
+                        <li><strong>Visualizar el flujo:</strong> Se usa un tablero con columnas que representan estados (Ej. "Por hacer", "En proceso", "En revisión", "Terminado"). Las tareas son tarjetas que se mueven de izquierda a derecha.</li>
+                        <li><strong>Limitar el Trabajo en Progreso (WIP):</strong> La regla más importante. No puedes tener 20 tareas en la columna "En proceso". Si limitas a 3, el equipo se ve obligado a terminar lo que empezó antes de tomar una tarea nueva.</li>
+                        <li><strong>Medir el tiempo de ciclo:</strong> Analizar cuánto tiempo tarda una tarea desde que entra al tablero hasta que se termina, para optimizar procesos.</li>
+                    </ul>
+                `
+            },
+            {
+                id: "bmc",
+                titulo: "7. Business Model Canvas",
+                resumen: "El hermano mayor del Lean Canvas. Ideal para planificar empresas sólidas o en crecimiento.",
+                claseColor: "color-blue",
+                colorHex: "#1e90ff",
+                detalle: `
+                    <h2>Business Model Canvas</h2>
+                    <p>Creado por Alexander Osterwalder, es la herramienta madre de donde nació el Lean Canvas. Mientras el Lean Canvas es para startups descubriendo su modelo, el Business Model Canvas es para empresas que ya tienen una idea más clara o están en funcionamiento.</p>
+                    <h3>Diferencias Clave con el Lean Canvas:</h3>
+                    <ul>
+                        <li><strong>Socios Clave:</strong> En lugar de enfocarse en el "Problema", define quiénes son los aliados estratégicos y proveedores necesarios para que el modelo funcione.</li>
+                        <li><strong>Actividades Clave:</strong> En lugar de la "Solución", detalla las acciones más importantes que la empresa debe realizar (ej. marketing, logística).</li>
+                        <li><strong>Recursos Clave:</strong> En lugar de "Métricas", lista los activos indispensables (físicos, intelectuales, humanos y financieros) requeridos para operar.</li>
+                        <li><strong>Relación con Clientes:</strong> En lugar de "Ventaja Especial", define qué tipo de vínculo quieres establecer (automatizado, asistencia personal, comunidades).</li>
+                    </ul>
+                `
+            },
+            {
+                id: "oceano",
+                titulo: "8. Estrategia del Océano Azul",
+                resumen: "Deja de pelear con la competencia. Crea un mercado nuevo donde no tengas rivales.",
+                claseColor: "color-teal",
+                colorHex: "#00fa9a",
+                detalle: `
+                    <h2>Estrategia del Océano Azul</h2>
+                    <p>Basada en el libro de W. Chan Kim y Renée Mauborgne. Propone que en lugar de competir en mercados saturados (Océanos Rojos, llenos de sangre por la competencia feroz), las empresas deben buscar nuevos espacios sin explotar.</p>
+                    <h3>Conceptos Fundamentales:</h3>
+                    <ul>
+                        <li><strong>Océano Rojo:</strong> Mercados existentes. Las reglas están definidas, la competencia es dura y los márgenes de ganancia son bajos porque todos pelean por precio.</li>
+                        <li><strong>Océano Azul:</strong> Espacios de mercado no aprovechados. Creas demanda en lugar de pelear por ella. La competencia se vuelve irrelevante porque tú pusiste las nuevas reglas.</li>
+                        <li><strong>Innovación en Valor:</strong> No se trata de crear alta tecnología, sino de alinear la innovación con la utilidad, el precio y el costo.</li>
+                        <li><strong>Esquema de las 4 Acciones:</strong> Para crear un océano azul debes preguntarte: ¿Qué variables del mercado podemos <i>Eliminar</i>? ¿Cuáles podemos <i>Reducir</i> muy por debajo del estándar? ¿Cuáles debemos <i>Incrementar</i> por encima del estándar? ¿Cuáles debemos <i>Crear</i> que la industria jamás ha ofrecido?</li>
+                    </ul>
+                `
+            }
+        ];
+
+        const menuContainer = document.getElementById('main-menu');
+        const detailPage = document.getElementById('detail-page');
+        const detailContent = document.getElementById('detail-content');
+        const mainTitle = document.getElementById('main-title');
+        const subtitle = document.getElementById('subtitle');
+
+        function cargarMenu() {
+            metodologias.forEach((metodo, index) => {
+                const card = document.createElement('div');
+                card.className = `card ${metodo.claseColor}`;
+                card.style.animationDelay = `${index * 0.06}s`;
+                card.tabIndex = 0;
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', `Ver detalle de ${metodo.titulo}`);
+                card.onclick = () => abrirDetalle(metodo.id);
+                card.onkeydown = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        abrirDetalle(metodo.id);
+                    }
+                };
+
+                card.innerHTML = `
+                    <h2>${metodo.titulo}</h2>
+                    <p>${metodo.resumen}</p>
+                `;
+                menuContainer.appendChild(card);
+            });
+        }
+
+        function abrirDetalle(id) {
+            const metodoSeleccionado = metodologias.find(m => m.id === id);
+
+            if (metodoSeleccionado) {
+                detailContent.innerHTML = metodoSeleccionado.detalle;
+                const h2Inside = detailContent.querySelector('h2');
+                if (h2Inside) h2Inside.style.color = metodoSeleccionado.colorHex;
+                if (h2Inside) h2Inside.style.borderColor = metodoSeleccionado.colorHex;
+
+                menuContainer.style.display = 'none';
+                mainTitle.style.display = 'none';
+                subtitle.style.display = 'none';
+                detailPage.style.display = 'block';
+
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function volverAlMenu() {
+            detailPage.style.display = 'none';
+            menuContainer.style.display = 'grid';
+            mainTitle.style.display = 'block';
+            subtitle.style.display = 'block';
+        }
+
+        cargarMenu();
+    </script>
+</body>
+</html>
